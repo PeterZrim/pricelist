@@ -10,10 +10,12 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ['name']
     list_filter = ['parent']
 
-
 class PriceHistoryInline(admin.TabularInline):
     model = PriceHistory
+    readonly_fields = ['date_changed', 'price', 'notes']
     extra = 1
+    can_delete = False
+    max_num = 0
 
 
 @admin.register(Product)
@@ -27,7 +29,7 @@ class ProductAdmin(admin.ModelAdmin):
     
     def save_model(self, request, obj, form, change):
         if change and 'price' in form.changed_data:
-            # Create price history entry when price changes
+            old_price = Product.objects.get(pk=obj.pk).price
             PriceHistory.objects.create(
                 product=obj,
                 price=obj.price,

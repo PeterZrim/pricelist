@@ -19,10 +19,17 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.views.generic import RedirectView
+
+admin.site.site_header = 'Carica Admin'
+admin.site.site_title = 'Carica Admin Portal'
+admin.site.index_title = 'Welcome to Carica Admin Portal'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('products.urls')),
+    # Redirect /admin/menu to admin index
+    path('admin/menu/', RedirectView.as_view(url='/admin/', permanent=True)),
 ]
 
 if settings.DEBUG:

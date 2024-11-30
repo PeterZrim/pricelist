@@ -10,6 +10,11 @@
                 <div class="welcome-message">
                     <i class="fas fa-user"></i> Živijo, {{ user.username }}!
                 </div>
+                {% if user.is_staff and not user.is_superuser %}
+                <a href="{% url 'admin:index' %}" class="btn admin-button">
+                    <i class="fas fa-user-cog"></i> User Panel
+                </a>
+                {% endif %}
                 {% endif %}
                 {% if user.is_staff %}
                 <button type="button" class="btn qr-button" data-bs-toggle="modal" data-bs-target="#qrModal">
