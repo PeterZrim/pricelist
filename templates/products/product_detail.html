@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ product.name }} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" class="img-fluid rounded" alt="{{ product.name }}">
+        {% else %}
+        <div class="bg-light text-center py-5 rounded">
+            <span class="text-muted">No image available</span>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="col-md-6">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'products:product_list' %}">Products</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'products:category_detail' product.category.slug %}">{{ product.category.name }}</a></li>
+                <li class="breadcrumb-item active">{{ product.name }}</li>
+            </ol>
+        </nav>
+
+        <h1 class="mb-3">{{ product.name }}</h1>
+        <p class="text-muted">SKU: {{ product.sku }}</p>
+        
+        <div class="mb-4">
+            <h3 class="text-primary mb-0">${{ product.price }}</h3>
+            <small class="text-muted">Last updated: {{ product.updated|date:"F j, Y" }}</small>
+        </div>
+
+        <div class="mb-4">
+            <h5>Description</h5>
+            <p>{{ product.description|linebreaks }}</p>
+        </div>
+
+        <div class="mb-4">
+            <h5>Stock Status</h5>
+            {% if product.stock > 0 %}
+            <span class="badge bg-success">In Stock ({{ product.stock }} available)</span>
+            {% else %}
+            <span class="badge bg-danger">Out of Stock</span>
+            {% endif %}
+        </div>
+
+        {% if price_history %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Price History</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm price-history">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Price</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for history in price_history %}
+                            <tr>
+                                <td>{{ history.date_changed|date:"M j, Y" }}</td>
+                                <td>${{ history.price }}</td>
+                                <td>{{ history.notes|default:"-" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Related Products -->
+<div class="mt-5">
+    <h3 class="mb-4">More from {{ product.category.name }}</h3>
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        {% for related_product in product.category.products.all|slice:":4" %}
+            {% if related_product != product %}
+            <div class="col">
+                <div class="card h-100 product-card">
+                    {% if related_product.image %}
+                    <img src="{{ related_product.image.url }}" class="card-img-top" alt="{{ related_product.name }}">
+                    {% else %}
+                    <div class="card-img-top bg-light text-center py-4">
+                        <span class="text-muted">No image</span>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ related_product.name }}</h5>
+                        <p class="card-text">${{ related_product.price }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'products:product_detail' related_product.slug %}" class="btn btn-outline-primary btn-sm w-100">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

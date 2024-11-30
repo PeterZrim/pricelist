@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ category.name }} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'products:product_list' %}">Products</a></li>
+        {% if category.parent %}
+        <li class="breadcrumb-item"><a href="{% url 'products:category_detail' category.parent.slug %}">{{ category.parent.name }}</a></li>
+        {% endif %}
+        <li class="breadcrumb-item active">{{ category.name }}</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-md-3">
+        <!-- Category Information -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h4 class="card-title">{{ category.name }}</h4>
+                {% if category.description %}
+                <p class="card-text">{{ category.description }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Subcategories -->
+        {% if subcategories %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Subcategories</h5>
+            </div>
+            <div class="list-group list-group-flush">
+                {% for subcategory in subcategories %}
+                <a href="{% url 'products:category_detail' subcategory.slug %}" 
+                   class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    {{ subcategory.name }}
+                    <span class="badge bg-primary rounded-pill">
+                        {{ subcategory.products.count }}
+                    </span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-9">
+        <!-- Products Grid -->
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for product in products %}
+            <div class="col">
+                <div class="card h-100 product-card">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                    {% else %}
+                    <div class="card-img-top bg-light text-center py-4">
+                        <span class="text-muted">No image</span>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text text-muted">SKU: {{ product.sku }}</p>
+                        <p class="card-text">{{ product.description|truncatewords:20 }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="h5 mb-0">${{ product.price }}</span>
+                            <a href="{% url 'products:product_detail' product.slug %}" class="btn btn-primary btn-sm">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    No products found in this category.
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if products.paginator.num_pages > 1 %}
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if products.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a>
+                </li>
+                {% endif %}
+
+                {% for num in products.paginator.page_range %}
+                <li class="page-item {% if products.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+                {% endfor %}
+
+                {% if products.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ products.next_page_number }}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

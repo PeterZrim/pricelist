@@ -1,0 +1,268 @@
+/* Modern Color Variables */
+:root {
+    --primary-color: #2c3e50;
+    --primary-hover: #34495e;
+    --accent-color: #3498db;
+    --success-color: #2ecc71;
+    --warning-color: #f1c40f;
+    --danger-color: #e74c3c;
+    --light-color: #ecf0f1;
+    --dark-color: #2c3e50;
+    --button-text: #ffffff;
+    --text-color: #ffffff;
+    --text-muted: rgba(255, 255, 255, 0.7);
+    --background-color: transparent;
+    --button-color: #2c3e50;
+    --button-hover: #34495e;
+    --badge-color: #2c3e50;
+    --badge-hover: #34495e;
+}
+
+/* Global Styles */
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Modern Button Styles */
+.btn {
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--button-text);
+    background: rgba(44, 62, 80, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(44, 62, 80, 0.4);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Button Variants - all using same color scheme */
+.btn-primary,
+.btn-secondary,
+.btn-success,
+.btn-danger,
+.btn-warning,
+.admin-button,
+.qr-button {
+    background: rgba(44, 62, 80, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--button-text);
+}
+
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-success:hover,
+.btn-danger:hover,
+.btn-warning:hover,
+.admin-button:hover,
+.qr-button:hover {
+    background: rgba(44, 62, 80, 0.4);
+    color: var(--button-text);
+}
+
+/* Category and Menu Item Styles */
+.category {
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+    transition: transform 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.category:hover {
+    transform: translateY(-2px);
+}
+
+.category h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+}
+
+.menu-item {
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.menu-item:hover {
+    transform: translateY(-2px);
+}
+
+.menu-item-image {
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.menu-item-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-color);
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* Description text */
+.menu-item p {
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+/* Price text */
+.menu-item .badge {
+    color: var(--button-text);
+}
+
+/* Badge Styles */
+.badge {
+    background-color: var(--primary-color);
+    color: var(--button-text);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+}
+
+.badge:hover {
+    background-color: var(--primary-hover);
+}
+
+/* Modal Styles */
+.modal-content {
+    background: rgba(44, 62, 80, 0.95);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+/* Admin Controls */
+.admin-controls {
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent;
+}
+
+/* Welcome Message Styles */
+.welcome-message {
+    color: var(--text-color);
+    font-size: 1rem;
+    margin: 0;
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: rgba(44, 62, 80, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.welcome-message i {
+    font-size: 0.9rem;
+}
+
+/* DateTime Display Styles */
+.datetime-display {
+    color: var(--text-color);
+    font-size: 1rem;
+    margin: 0;
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: rgba(44, 62, 80, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.datetime-display i {
+    font-size: 0.9rem;
+}
+
+/* Footer Styles */
+.footer {
+    display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    .menu-item {
+        padding: 15px;
+    }
+
+    .btn {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+
+    .category h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.menu-item {
+    animation: fadeIn 0.3s ease-out;
+}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card bg-dark text-white">
+                <div class="card-header">
+                    <h2>Izbriši izdelek</h2>
+                </div>
+                <div class="card-body">
+                    <p>Ali ste prepričani, da želite izbrisati izdelek "{{ product.name }}"?</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Izbriši</button>
+                        <a href="{% url 'products:product_list' %}" class="btn btn-secondary">Prekliči</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

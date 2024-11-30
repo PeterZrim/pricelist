@@ -1,0 +1,128 @@
+/* Reset and base styles */
+html {
+    min-height: 100%;
+    background-color: #000; /* Black background as fallback */
+}
+
+body {
+    background-image: url('/static/products/images/background.jpg') !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+    background-size: cover !important;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: #fff;
+}
+
+/* Logo styles */
+.logo-container {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.logo {
+    max-width: 200px;
+    height: auto;
+}
+
+/* Menu item styles */
+.menu-item {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.menu-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.menu-item-image {
+    text-align: center;
+}
+
+.menu-item-image img {
+    border-radius: 8px;
+    object-fit: cover;
+    max-height: 200px;
+    width: auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.menu-item h5 {
+    color: #fff;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.menu-item .text-muted {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.menu-item .badge {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #e74c3c;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    color: white;
+}
+
+.category h2 {
+    color: #fff;
+    border-bottom: 2px solid #e74c3c;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.text-muted .badge {
+    background-color: rgba(149, 165, 166, 0.8) !important;
+}
+
+/* Container and layout */
+.container {
+    background-color: rgba(0, 0, 0, 0.5);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .menu-item {
+        margin-bottom: 1rem;
+        padding: 1rem;
+    }
+    
+    .menu-item h5 {
+        font-size: 1.1rem;
+    }
+    
+    .menu-item .badge {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    .category h2 {
+        font-size: 1.6rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .col-md-6.pe-md-5,
+    .col-md-6.ps-md-5 {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+}
