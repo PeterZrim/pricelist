@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     
     # Local apps
-    'products.apps.ProductsConfig',
+    'products',
 ]
 
 MIDDLEWARE = [
