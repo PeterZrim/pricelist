@@ -4,13 +4,17 @@
 cd $HOME/site/wwwroot
 
 # Create virtual environment if it doesn't exist
-python -m venv env
+python -m venv antenv
 
 # Activate virtual environment
-source env/bin/activate
+source antenv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
+
+# Export environment variables
+export DJANGO_SETTINGS_MODULE=core.settings.base
+export PYTHONPATH=$HOME/site/wwwroot
 
 # Collect static files
 python manage.py collectstatic --noinput
