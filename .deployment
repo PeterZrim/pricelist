@@ -1,4 +1,4 @@
 [config]
+command = bash deploy.sh
 SCM_DO_BUILD_DURING_DEPLOYMENT=true
-POST_BUILD_SCRIPT_PATH=startup.sh
 DEPLOYMENT_SOURCE=.

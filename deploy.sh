@@ -1,29 +1,47 @@
 #!/bin/bash
 
-# Colors for output
-GREEN='\033[0;32m'
-NC='\033[0m'
+# Navigate to project directory
+cd "$DEPLOYMENT_TARGET" || exit 1
 
-# Check if Git is initialized
-if [ ! -d .git ]; then
-    echo -e "${GREEN}Initializing Git repository...${NC}"
-    git init
-    git add .
-    git commit -m "Initial commit"
-fi
+# Create and activate virtual environment
+python -m venv antenv
+source antenv/bin/activate
 
-# Add Azure remote if it doesn't exist
-if ! git remote | grep -q "azure"; then
-    echo -e "${GREEN}Please enter the Azure Git deployment URL:${NC}"
-    read AZURE_GIT_URL
-    git remote add azure $AZURE_GIT_URL
-fi
+# Install dependencies
+pip install --upgrade pip
+pip install -r requirements.txt
 
-# Deploy to Azure
-echo -e "${GREEN}Deploying to Azure...${NC}"
-git add .
-git commit -m "Deploy to Azure"
-git push azure master --force
+# Export environment variables
+export DJANGO_SETTINGS_MODULE=core.settings.production
+export PYTHONPATH=$DEPLOYMENT_TARGET
 
-echo -e "${GREEN}Deployment complete!${NC}"
-echo "Your app should be available in a few minutes at your Azure Web App URL"
+# Collect static files
+python manage.py collectstatic --noinput
+
+# Apply database migrations
+python manage.py migrate --noinput
+
+# Create web.config file for Azure
+cat > web.config << EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <system.webServer>
+    <handlers>
+      <add name="httpPlatformHandler" path="*" verb="*" modules="httpPlatformHandler" resourceType="Unspecified" />
+    </handlers>
+    <httpPlatform processPath="%HOME%\site\wwwroot\antenv\Scripts\python.exe"
+                  arguments="%HOME%\site\wwwroot\antenv\Scripts\gunicorn.exe core.wsgi:application --bind=0.0.0.0:8000 --workers=2 --threads=4 --worker-class=gthread --timeout=600"
+                  stdoutLogEnabled="true"
+                  stdoutLogFile="%HOME%\LogFiles\python.log"
+                  startupTimeLimit="60">
+      <environmentVariables>
+        <environmentVariable name="PYTHONPATH" value="%HOME%\site\wwwroot" />
+        <environmentVariable name="DJANGO_SETTINGS_MODULE" value="core.settings.production" />
+      </environmentVariables>
+    </httpPlatform>
+  </system.webServer>
+</configuration>
+EOF
+
+# Make startup script executable
+chmod +x startup.sh
