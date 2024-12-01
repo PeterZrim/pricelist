@@ -3,12 +3,16 @@
 # Navigate to project directory
 cd "$DEPLOYMENT_TARGET" || exit 1
 
+# Set environment variables
+export PATH=/usr/local/bin:/usr/bin:/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib:/lib:$LD_LIBRARY_PATH
+
 # Create and activate virtual environment
-/opt/python/3.11/bin/python3 -m venv antenv
+python3 -m venv antenv
 source antenv/bin/activate
 
 # Install dependencies
-pip install --upgrade pip
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 
 # Export environment variables
