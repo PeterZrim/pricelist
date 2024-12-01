@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 
 # Security Settings
-DEBUG = False
+DEBUG = True  # Temporarily set to True for debugging
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 ALLOWED_HOSTS = ['carica-cenik.com', 'www.carica-cenik.com', '46.202.152.146']
 
@@ -51,4 +51,21 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+# Templates configuration
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
 ]
