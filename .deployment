@@ -1,4 +1,5 @@
 [config]
 command = bash .azure/deploy.sh
 SCM_DO_BUILD_DURING_DEPLOYMENT=true
+POST_BUILD_SCRIPT_PATH=.azure/post_build.sh
 DEPLOYMENT_SOURCE=.
