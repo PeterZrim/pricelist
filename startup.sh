@@ -1,13 +1,17 @@
 #!/bin/bash
 
+# Install system dependencies
+apt-get update
+apt-get install -y python3-venv python3-dev
+
 # Change to the app directory
 cd $HOME/site/wwwroot
 
 # Create and activate virtual environment
-python -m venv antenv
+python3 -m venv antenv
 source antenv/bin/activate
 
-# Install dependencies
+# Install Python dependencies
 pip install --upgrade pip
 pip install -r requirements.txt
 
@@ -22,10 +26,5 @@ python manage.py collectstatic --noinput
 # Apply database migrations
 python manage.py migrate --noinput
 
-# Start Gunicorn with optimized settings for B1 tier
-exec gunicorn core.wsgi:application \
-    --bind=0.0.0.0:8000 \
-    --workers=2 \
-    --threads=4 \
-    --worker-class=gthread \
-    --timeout=600
+# Start Gunicorn
+exec gunicorn core.wsgi:application --bind=0.0.0.0:8000 --workers=2 --threads=4 --worker-class=gthread --timeout=600

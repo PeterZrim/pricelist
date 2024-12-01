@@ -3,28 +3,6 @@
 # Navigate to project directory
 cd "$DEPLOYMENT_TARGET" || exit 1
 
-# Set environment variables
-export PATH=/usr/local/bin:/usr/bin:/bin:$PATH
-export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib:/lib:$LD_LIBRARY_PATH
-
-# Create and activate virtual environment
-python3 -m venv antenv
-source antenv/bin/activate
-
-# Install dependencies
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-
-# Export environment variables
-export DJANGO_SETTINGS_MODULE=core.settings.production
-export PYTHONPATH=$DEPLOYMENT_TARGET
-
-# Collect static files
-python manage.py collectstatic --noinput
-
-# Apply database migrations
-python manage.py migrate --noinput
-
 # Create web.config file for Azure
 cat > web.config << EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -33,8 +11,8 @@ cat > web.config << EOF
     <handlers>
       <add name="httpPlatformHandler" path="*" verb="*" modules="httpPlatformHandler" resourceType="Unspecified" />
     </handlers>
-    <httpPlatform processPath="%HOME%\site\wwwroot\antenv\Scripts\python.exe"
-                  arguments="%HOME%\site\wwwroot\antenv\Scripts\gunicorn.exe core.wsgi:application --bind=0.0.0.0:8000 --workers=2 --threads=4 --worker-class=gthread --timeout=600"
+    <httpPlatform processPath="bash"
+                  arguments="startup.sh"
                   stdoutLogEnabled="true"
                   stdoutLogFile="%HOME%\LogFiles\python.log"
                   startupTimeLimit="60">
