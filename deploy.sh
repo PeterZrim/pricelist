@@ -4,7 +4,7 @@
 cd "$DEPLOYMENT_TARGET" || exit 1
 
 # Create and activate virtual environment
-python -m venv antenv
+/opt/python/3.11/bin/python3 -m venv antenv
 source antenv/bin/activate
 
 # Install dependencies
