@@ -26,12 +26,13 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 media/
+staticfiles/
 
 # Virtual Environment
 venv/
-ENV/
 env/
-.env
+ENV/
+antenv/
 
 # IDE
 .idea/
@@ -42,3 +43,8 @@ env/
 # OS
 .DS_Store
 Thumbs.db
+
+# Environment variables
+.env
+.env.local
+.env.*.local
