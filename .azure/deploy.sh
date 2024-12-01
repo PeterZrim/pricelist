@@ -3,6 +3,14 @@
 # Navigate to project directory
 cd "$DEPLOYMENT_TARGET" || exit 1
 
+# Install pip if not available
+if ! command -v pip &> /dev/null; then
+    echo "Installing pip..."
+    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+    /usr/bin/python3 get-pip.py
+    rm get-pip.py
+fi
+
 # Install Python dependencies
 echo "Installing Python dependencies..."
 /usr/bin/python3 -m pip install -r requirements.txt
