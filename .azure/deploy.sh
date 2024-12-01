@@ -1,19 +1,12 @@
 #!/bin/bash
 
-# If this is initial deployment, install system dependencies
-if [ ! -d "$DEPLOYMENT_TARGET/antenv" ]; then
-    echo "Installing system dependencies..."
-    apt-get update
-    apt-get install -y python3-venv python3-dev
-fi
-
 # Navigate to project directory
 cd "$DEPLOYMENT_TARGET" || exit 1
 
-# Create and activate virtual environment if it doesn't exist
+# Create virtual environment if it doesn't exist
 if [ ! -d "antenv" ]; then
     echo "Creating virtual environment..."
-    python3 -m venv antenv
+    /usr/local/bin/python3.11 -m venv antenv
 fi
 
 # Activate virtual environment
@@ -21,7 +14,7 @@ source antenv/bin/activate
 
 # Install Python dependencies
 echo "Installing Python dependencies..."
-pip install --upgrade pip
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 
 # Collect static files
@@ -41,13 +34,13 @@ cat > web.config << EOF
     <handlers>
       <add name="httpPlatformHandler" path="*" verb="*" modules="httpPlatformHandler" resourceType="Unspecified" />
     </handlers>
-    <httpPlatform processPath="/usr/bin/python3"
-                  arguments="$DEPLOYMENT_TARGET/antenv/bin/gunicorn core.wsgi:application --bind=0.0.0.0:8000 --workers=2 --threads=4 --worker-class=gthread --timeout=600"
+    <httpPlatform processPath="%HOME%\site\wwwroot\antenv\Scripts\python.exe"
+                  arguments="%HOME%\site\wwwroot\antenv\Scripts\gunicorn.exe core.wsgi:application --bind=0.0.0.0:8000 --workers=2 --threads=4 --worker-class=gthread --timeout=600"
                   stdoutLogEnabled="true"
                   stdoutLogFile="\$HOME\LogFiles\python.log"
                   startupTimeLimit="60">
       <environmentVariables>
-        <environmentVariable name="PYTHONPATH" value="\$HOME\site\wwwroot" />
+        <environmentVariable name="PYTHONPATH" value="%HOME%\site\wwwroot" />
         <environmentVariable name="DJANGO_SETTINGS_MODULE" value="core.settings.production" />
       </environmentVariables>
     </httpPlatform>
