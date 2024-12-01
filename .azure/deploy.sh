@@ -1,33 +1,36 @@
 #!/bin/bash
 
-# Set up environment variables
-export HOME=/home/site/wwwroot
-export DEPLOYMENT_SOURCE=/home/site/repository
-export DEPLOYMENT_TARGET=/home/site/wwwroot
+# Exit on error
+set -e
 
-# Copy repository contents to wwwroot
-echo "Copying repository contents..."
-cp -r $DEPLOYMENT_SOURCE/* $DEPLOYMENT_TARGET/
+# Setup
+echo "Setting up deployment..."
+DEPLOYMENT_SOURCE="${DEPLOYMENT_SOURCE:-/home/site/repository}"
+DEPLOYMENT_TARGET="${DEPLOYMENT_TARGET:-/home/site/wwwroot}"
+PYTHON_VERSION="3.11"
+PYTHON_PATH="/usr/local/bin/python${PYTHON_VERSION}"
 
-# Navigate to project directory
-cd "$DEPLOYMENT_TARGET" || exit 1
+# Install system dependencies
+echo "Installing system dependencies..."
+apt-get update
+apt-get install -y unixodbc-dev python3-dev python3-pip python3-venv
 
-# Install pip if not available
-if ! command -v pip &> /dev/null; then
-    echo "Installing pip..."
-    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-    /usr/bin/python3 get-pip.py --user
-    export PATH="/home/.local/bin:$PATH"
-    rm get-pip.py
-fi
+# Install ODBC Driver
+echo "Installing ODBC Driver..."
+curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list
+apt-get update
+ACCEPT_EULA=Y apt-get install -y msodbcsql17
 
-# Install Python dependencies
+# Create and activate virtual environment
+echo "Setting up Python virtual environment..."
+python3 -m venv /home/site/wwwroot/env
+source /home/site/wwwroot/env/bin/activate
+
+# Upgrade pip and install dependencies
 echo "Installing Python dependencies..."
-pip install --user -r requirements.txt
-
-# Set up Django environment
-export DJANGO_SETTINGS_MODULE=core.settings.production
-export PYTHONPATH=$DEPLOYMENT_TARGET
+python -m pip install --upgrade pip
+pip install -r requirements.txt
 
 # Collect static files
 echo "Collecting static files..."

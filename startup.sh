@@ -1,30 +1,21 @@
 #!/bin/bash
 
-# Install system dependencies
-apt-get update
-apt-get install -y python3-venv python3-dev
+# Activate virtual environment
+source /home/site/wwwroot/env/bin/activate
 
-# Change to the app directory
-cd $HOME/site/wwwroot
-
-# Create and activate virtual environment
-python3 -m venv antenv
-source antenv/bin/activate
-
-# Install Python dependencies
-pip install --upgrade pip
-pip install -r requirements.txt
-
-# Export environment variables
+# Set environment variables
+export PYTHONPATH=/home/site/wwwroot
 export DJANGO_SETTINGS_MODULE=core.settings.production
-export PYTHONPATH=$HOME/site/wwwroot
-export PORT=8000
-
-# Collect static files
-python manage.py collectstatic --noinput
-
-# Apply database migrations
-python manage.py migrate --noinput
+export PORT="${PORT:-8000}"
 
 # Start Gunicorn
-exec gunicorn core.wsgi:application --bind=0.0.0.0:8000 --workers=2 --threads=4 --worker-class=gthread --timeout=600
+exec gunicorn core.wsgi:application \
+    --bind=0.0.0.0:$PORT \
+    --workers=2 \
+    --threads=4 \
+    --worker-class=gthread \
+    --timeout=600 \
+    --access-logfile=- \
+    --error-logfile=- \
+    --capture-output \
+    --enable-stdio-inheritance
