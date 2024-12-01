@@ -1,33 +1,27 @@
 """
 Production settings for the Pricelist project.
 """
-import os
 from .base import *
-from decouple import config
+import os
+from pathlib import Path
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('DJANGO_SECRET_KEY')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['.azurewebsites.net', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['carica-cenik.com', 'www.carica-cenik.com', '46.202.152.146']  # Replace with your actual domain
 
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'mssql',
-        'NAME': config('AZURE_SQL_DATABASE', default='pricelistdb'),
-        'USER': config('AZURE_SQL_USER'),
-        'PASSWORD': config('AZURE_SQL_PASSWORD'),
-        'HOST': config('AZURE_SQL_HOST'),
-        'PORT': '1433',
-        'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server',
-            'unicode_results': True,
-            'host_is_server': True,
-            'use_mars': True,
-        },
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -48,6 +42,8 @@ STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
+MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
 AZURE_ACCOUNT_NAME = config('AZURE_STORAGE_ACCOUNT_NAME')
 AZURE_ACCOUNT_KEY = config('AZURE_STORAGE_ACCOUNT_KEY')
@@ -73,14 +69,17 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': '/var/log/django/error.log',
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
-            'level': 'INFO',
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
         },
     },
 }
