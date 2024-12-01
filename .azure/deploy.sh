@@ -3,9 +3,13 @@
 # Navigate to project directory
 cd "$DEPLOYMENT_TARGET" || exit 1
 
+# Set up Python paths
+export PATH=/usr/local/python/3.11/bin:$PATH
+export PYTHONPATH=$DEPLOYMENT_TARGET
+
 # Install Python dependencies
 echo "Installing Python dependencies..."
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 
 # Collect static files
 echo "Collecting static files..."
